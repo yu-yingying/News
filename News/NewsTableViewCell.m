@@ -7,11 +7,13 @@
 //
 
 #import "NewsTableViewCell.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 // #import "News.h"
 
 @interface NewsTableViewCell()
 
 @property(nonatomic, strong) UILabel *titleLabel;
+@property(nonatomic, strong) UIImageView *coverImageView;
 
 @end
 
@@ -22,37 +24,44 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         [self.contentView addSubview:self.titleLabel];
+        [self.contentView addSubview:self.coverImageView];
         
     }
     return self;
     
 }
 
-- (void) layoutWithData: (News *)news {
+- (void)layoutWithData: (News *)news{
     self.titleLabel.text = news.title;
     [self.titleLabel sizeToFit];
+    
+    [self.coverImageView sd_setImageWithURL:[NSURL URLWithString:news.coverURL]];
+    
+    
 }
 
 - (UILabel *)titleLabel {
     if (!_titleLabel) {
-        _titleLabel = [[UILabel  alloc] initWithFrame:CGRectMake(20, 10, 100, 20)];
+        _titleLabel = [[UILabel  alloc] initWithFrame:CGRectMake(180, 10, 50, 80)];
     }
     return _titleLabel;
 }
 
-+ (CGFloat) height {
-    return 60;
+- (UIImageView *)coverImageView {
+    if (!_coverImageView) {
+        _coverImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 160, 80)];
+        _coverImageView.backgroundColor = [UIColor grayColor];
+        //        图片不变形
+        _coverImageView.contentMode = UIViewContentModeScaleAspectFill;
+        _coverImageView.clipsToBounds = YES;
+        _coverImageView.layer.cornerRadius = 3;
+    }
+    
+    return _coverImageView;
 }
 
-//- (void)awakeFromNib {
-//    [super awakeFromNib];
-//    // Initialization code
-//}
-//
-//- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-//    [super setSelected:selected animated:animated];
-//
-//    // Configure the view for the selected state
-//}
++ (CGFloat) height {
+    return 100;
+}
 
 @end
